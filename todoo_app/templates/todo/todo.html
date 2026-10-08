@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss Todo App</title>
+    <!-- Tailwind CSS CDN - Instant drip -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-slate-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-slate-700">
+        <h1 class="text-3xl font-extrabold text-center mb-6 text-indigo-400">Boss Todo App 🚀</h1>
+        
+        <!-- Form -->
+        <form method="POST" class="flex gap-2 mb-6">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter a new task..." required
+                class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500 text-slate-100">
+            <button type="submit" 
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg transition duration-200">
+                Add
+            </button>
+        </form>
+
+        <!-- Todo List -->
+        <ul class="space-y-3">
+            {% for todo in todos %}
+                <li class="flex items-center justify-between bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                    <span class="{% if todo.completed %} line-through text-slate-500 {% endif %}">
+                        {{ todo.title }}
+                    </span>
+                    <div class="flex gap-2">
+                        <form method="POST" action="{% url 'update_todo' todo.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="text-xs bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 px-3 py-1 rounded-md transition">
+                                {% if todo.completed %} Undo {% else %} Done {% endif %}
+                            </button>
+                        </form>
+                        <form method="POST" action="{% url 'delete_todo' todo.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="text-xs bg-rose-600/20 text-rose-400 hover:bg-rose-600/30 px-3 py-1 rounded-md transition">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            {% empty %}
+                <p class="text-center text-slate-500 py-4">No tasks yet. Go build something, rookie!</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>

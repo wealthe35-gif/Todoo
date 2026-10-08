@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .signup-form .errorlist { color: #fda4af; margin: 0.25rem 0; }
+        .signup-form .helptext { color: #cbd5e1; display: block; font-size: 0.875rem; margin-top: 0.25rem; }
+        .signup-form input { background: #0f172a; border: 1px solid #475569; border-radius: 0.375rem; color: #f8fafc; padding: 0.5rem; width: 100%; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center">
+    <main class="bg-slate-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-slate-700">
+        <h1 class="text-3xl font-extrabold text-center mb-6 text-indigo-400">Create your account</h1>
+
+        <form method="POST" class="signup-form space-y-4">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div role="alert" class="rounded border border-rose-500/50 bg-rose-950/50 p-3 text-sm text-rose-200">
+                    Your account was not created. Fix the highlighted errors below. Passwords must match, be at least 8 characters, and not be common or entirely numeric.
+                </div>
+            {% endif %}
+            <div class="space-y-2 text-slate-300">
+                {{ form.as_p }}
+            </div>
+            <button type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 rounded-lg transition duration-200">
+                Sign Up
+            </button>
+        </form>
+
+        <p class="mt-5 text-center text-sm text-slate-300">
+            Already have an account? <a href="{% url 'login' %}" class="text-indigo-400 hover:text-indigo-300">Log in</a>
+        </p>
+    </main>
+</body>
+</html>
