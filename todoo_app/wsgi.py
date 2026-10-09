@@ -13,11 +13,8 @@ from django.core.management import call_command
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'todoo_app.settings')
 
-# Automatically run migrations on startup for serverless
-try:
-    call_command('migrate')
-except Exception as e:
-    print(f"Migration error: {e}")
-
 application = get_wsgi_application()
 app = application
+
+# Serverless instances use an ephemeral database, so apply migrations at startup.
+call_command('migrate')

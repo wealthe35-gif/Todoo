@@ -5,12 +5,12 @@
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb" }
     }
+
   ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "todoo_app/wsgi.py"
     }
-  ],
-  "buildCommand": "python manage.py migrate"
+  ]
 }

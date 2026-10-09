@@ -23,7 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() in {'1', 'true', 'yes'}
+IS_VERCEL = bool(os.environ.get('VERCEL'))
+DEBUG = os.environ.get(
+    'DJANGO_DEBUG',
+    'false' if IS_VERCEL else 'true',
+).lower() in {'1', 'true', 'yes'}
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
@@ -33,7 +37,10 @@ if not SECRET_KEY:
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,[::1]').split(',')
+    for host in os.environ.get(
+        'DJANGO_ALLOWED_HOSTS',
+        'localhost,127.0.0.1,[::1],.vercel.app' if IS_VERCEL else 'localhost,127.0.0.1,[::1]',
+    ).split(',')
     if host.strip()
 ]
 
@@ -82,8 +89,6 @@ WSGI_APPLICATION = 'todoo_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-import os
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
